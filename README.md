@@ -7,6 +7,15 @@ To run an agent, first install locally the library with maven, then, in the dire
   mvn quarkus:dev
 ```
 
+Alternative :
+```bash
+    cd PATH/TO/pingable
+    mvn clean
+    mvn package
+    mvn quarkus:run
+```
+
+
 ## Test Pingable alone
 
 Run the Pingable agent (see above), then, run the client Python script from `a2a-acl` :
