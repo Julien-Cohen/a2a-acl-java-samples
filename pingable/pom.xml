@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.samples.a2a</groupId>
         <artifactId>agents-parent</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.11</version>
     </parent>
 
     <artifactId>pingable</artifactId>

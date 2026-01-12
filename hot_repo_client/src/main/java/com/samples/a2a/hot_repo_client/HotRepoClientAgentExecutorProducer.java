@@ -37,29 +37,51 @@ public final class HotRepoClientAgentExecutorProducer {
         static final String skillDescr = "mandatory_skill(achieve, do_jump,0)";
 
         @Override
-        public void execute(final ACLMessage m,
+        public void executeTell(final ACLMessage m,
                             final EventQueue eventQueue) throws JSONRPCError {
-
-            System.out.println("Received a message.");
-            if (m.content().startsWith("selected") && m.illocution()!= null && m.illocution().equals("tell")) {
+            System.out.println("Received a tell message.");
+            if (m.content().startsWith("selected")) {
                 System.out.println("Received a tell/selected message: " + m.content());
                 System.out.println("Decoded selection: " + decodeSelection(m.content()));
                 eventQueue.enqueueEvent(A2A.toAgentMessage("Ack : tell/selected received."));
-
             }
-            else if (m.content().startsWith("go") && m.illocution()!= null && m.illocution().equals("achieve")) {
+            else {
+                System.out.println("Unknown request (only receive selected with tell)." );
+                eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
+            }
+        }
+
+        @Override
+        public void executeAchieve(final ACLMessage m,
+                                final EventQueue eventQueue) throws JSONRPCError {
+            System.out.println("Received an achieve message.");
+            if (m.content().startsWith("go")) {
                 System.out.println("Received a achieve/go request");
                 eventQueue.enqueueEvent(A2A.toAgentMessage("Ack : achieve/go received."));
 
                 spawn_send_message(hotRepoUrl, myUrl, "ask", "python_agentspeak_codec", "by_skills(["+skillDescr + "|[]])");
             }
             else {
-                System.out.println("Unknown request (only receive go or selected messages)." );
+                System.out.println("Unknown request (only receive go with achieve)." );
                 eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
-                
             }
-
         }
+
+        @Override
+        public void executeAsk(final ACLMessage m,
+                                final EventQueue eventQueue) throws JSONRPCError {
+            System.out.println("Received an ask message.");
+            System.out.println("Unknown request (cannot receive ask messages)." );
+            eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
+        }
+
+        @Override
+        public void executeOther(final ACLMessage m,
+                                final EventQueue eventQueue) throws JSONRPCError {
+            System.out.println("Received a message with unsupported illocution: " + m.illocution());
+            eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
+        }
+
     /** Returns a new string without selected(" at the beginning and ") at the end. */
     static String decodeSelection(String s){
             assert (s.startsWith("selected(") && s.endsWith(")"));

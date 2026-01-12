@@ -35,17 +35,26 @@ public final class PingerAgentExecutorProducer  {
         static final String otherAgentUrl = "http://127.0.0.1:9998";
 
         @Override
-        public void execute(final ACLMessage message,
+        public void executeTell(final ACLMessage message,
                             final EventQueue eventQueue) throws JSONRPCError {
-
-
-
-            if (message.content().equals("pong")&& message.illocution()!= null && message.illocution().equals("tell")) {
+            assert(message.illocution()!= null && message.illocution().equals("tell"));
+            if (message.content().equals("pong")) {
                 eventQueue.enqueueEvent(A2A.toAgentMessage("Ack : tell/pong received."));
                 System.out.println("Test OK : Received a tell/pong message.");
-
             }
-            else if (message.content().startsWith("do_ping") && message.illocution()!= null && message.illocution().equals("achieve")){
+            else {
+                eventQueue.enqueueEvent(A2A.toAgentMessage("Unknown request."));
+                System.out.println(message.content());
+                System.out.println("Unknown request (only receive pong for tell messages)." );
+                System.exit(0);
+            }
+        }
+
+        @Override
+        public void executeAchieve(final ACLMessage message,
+                            final EventQueue eventQueue) throws JSONRPCError {
+            assert(message.illocution()!= null && message.illocution().equals("achieve"));
+            if (message.content().startsWith("do_ping")){
                 System.out.println("Message achieve/do_ping received.");
                 System.out.println("(Going to synchronously reply OK.)");
                 eventQueue.enqueueEvent(A2A.toAgentMessage("Ack : achieve/do_ping received."));
@@ -56,12 +65,28 @@ public final class PingerAgentExecutorProducer  {
             else {
                 eventQueue.enqueueEvent(A2A.toAgentMessage("Unknown request."));
                 System.out.println(message.content());
-                System.out.println("Unknown request (only receive do_ping or pong requests)." );
+                System.out.println("Unknown request (only receive do_ping with achieve messages)." );
                 System.exit(0);
             }
-
         }
 
+        @Override
+        public void executeAsk(final ACLMessage message,
+                            final EventQueue eventQueue) throws JSONRPCError {
+                eventQueue.enqueueEvent(A2A.toAgentMessage("Unknown request."));
+                System.out.println(message.content());
+                System.out.println("Unknown request (does not accept ask requests)." );
+                System.exit(0);
+        }
 
+        @Override
+        public void executeOther(final ACLMessage message,
+                            final EventQueue eventQueue) throws JSONRPCError {
+
+                eventQueue.enqueueEvent(A2A.toAgentMessage("Unknown illocution: " + message.illocution()));
+                System.out.println(message.content());
+                System.out.println("Unknown request (illocution " + message.illocution() + ")." );
+                System.exit(0);
+        }
     }
 }

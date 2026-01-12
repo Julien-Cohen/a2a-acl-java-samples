@@ -34,11 +34,19 @@ public final class PingableAgentExecutorProducer {
         static final String myUrl = "http://127.0.0.1:9998";
 
         @Override
-        public void execute(final ACLMessage m,
+        public void executeTell(final ACLMessage m,
                             final EventQueue eventQueue) throws JSONRPCError {
+            eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
+            System.out.println("Unknown request (only receive achieve/ping requests)." );
+            System.exit(-1);
+        }
 
+        @Override
+        public void executeAchieve(final ACLMessage m,
+                            final EventQueue eventQueue) throws JSONRPCError {
+            assert (m.illocution()!= null && m.illocution().equals("achieve")) ;
 
-            if (m.content().equals("ping") && m.illocution()!= null && m.illocution().equals("achieve")) {
+            if (m.content().equals("ping")) {
                 System.out.println("Received a achieve/ping request");
                 eventQueue.enqueueEvent(A2A.toAgentMessage("Ack : achieve/ping received."));
 
@@ -46,14 +54,24 @@ public final class PingableAgentExecutorProducer {
             }
             else {
                 eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
-                System.out.println("Unknown request (only receive ping requests)." );
+                System.out.println("Unknown request (only receive achieve/ping requests)." );
                 System.exit(-1);
             }
-
+        }
+        @Override
+        public void executeAsk(final ACLMessage m,
+                            final EventQueue eventQueue) throws JSONRPCError {
+                eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
+                System.out.println("Unknown request (only receive achieve/ping requests)." );
+                System.exit(-1);
         }
 
-
-
-
+        @Override
+        public void executeOther(final ACLMessage m,
+                            final EventQueue eventQueue) throws JSONRPCError {
+                eventQueue.enqueueEvent(A2A.toAgentMessage("KO : Unknown request."));
+                System.out.println("Unknown request (only receive achieve/ping requests)." );
+                System.exit(-1);
+        }
     }
 }
