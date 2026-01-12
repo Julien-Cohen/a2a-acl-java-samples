@@ -45,7 +45,7 @@ public final class PingerAgentCardProducer {
         .defaultInputModes(Collections.singletonList("text"))
         .defaultOutputModes(Collections.singletonList("text"))
         .skills(
-            Collections.singletonList(
+            List.of(
                 new AgentSkill.Builder()
                     .id("pong")
                     .name("Pong")
@@ -54,8 +54,20 @@ public final class PingerAgentCardProducer {
                     .tags(List.of("pong"))
                     .examples(
                         List.of(
-                            "pong"))
-                    .build()))
+                            "(tell,pong)"))
+                    .build(),
+                    new AgentSkill.Builder()
+                            .id("do_ping")
+                            .name("Do-Ping")
+                            .description(
+                                    "Send a ping")
+                            .tags(List.of("ping"))
+                            .examples(
+                                    List.of(
+                                            "(achieve,do_ping)"))
+                            .build()
+            )
+        )
         .protocolVersion("0.3.3.Final")
         .build();
   }

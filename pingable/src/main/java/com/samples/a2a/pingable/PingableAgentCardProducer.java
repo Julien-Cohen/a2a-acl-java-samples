@@ -54,7 +54,7 @@ public final class PingableAgentCardProducer {
                     .tags(List.of("ping"))
                     .examples(
                         List.of(
-                            "ping"))
+                            "(achieve,ping)"))
                     .build()))
         .protocolVersion("0.3.3.Final")
         .build();
