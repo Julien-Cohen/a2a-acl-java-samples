@@ -54,7 +54,7 @@ public final class HotRepoClientCardProducer {
                     .tags(List.of("selected"))
                     .examples(
                         List.of(
-                            "selected(url)"))
+                            "(tell,selected(url))"))
                     .build()))
         .protocolVersion("0.3.3.Final")
         .build();
