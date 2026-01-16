@@ -6,8 +6,10 @@ import io.a2a.server.events.EventQueue;
 import io.a2a.spec.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import mosaico.acl.ACLMessage;
 import mosaico.acl.BDIAgentExecutor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
 /**
@@ -15,6 +17,10 @@ import mosaico.acl.BDIAgentExecutor;
  */
 @ApplicationScoped
 public final class PingableAgentExecutorProducer {
+    /** HTTP port for the agent. */
+    @Inject
+    @ConfigProperty(name = "quarkus.http.port")
+    private int httpPort;
 
     /**
      * Creates the agent executor for the content writer agent.
@@ -29,9 +35,11 @@ public final class PingableAgentExecutorProducer {
     /**
      * Agent executor implementation for ping service.
      */
-    private static class PingableAgentExecutor extends BDIAgentExecutor {
+    private class PingableAgentExecutor extends BDIAgentExecutor {
 
-        static final String myUrl = "http://127.0.0.1:9998";
+
+
+        final String myUrl = "http://127.0.0.1:" + httpPort ;
 
         @Override
         public void executeTell(final ACLMessage m,

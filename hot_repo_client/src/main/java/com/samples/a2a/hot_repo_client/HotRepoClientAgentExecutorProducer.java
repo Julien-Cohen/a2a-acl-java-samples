@@ -6,8 +6,10 @@ import io.a2a.server.events.EventQueue;
 import io.a2a.spec.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import mosaico.acl.ACLMessage;
 import mosaico.acl.BDIAgentExecutor;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 
 /**
@@ -15,6 +17,11 @@ import mosaico.acl.BDIAgentExecutor;
  */
 @ApplicationScoped
 public final class HotRepoClientAgentExecutorProducer {
+
+    /** HTTP port for the agent. */
+    @Inject
+    @ConfigProperty(name = "quarkus.http.port") // defined in file resources/application.properties
+    private int httpPort;
 
     /**
      * Creates the agent executor for the client agent.
@@ -27,11 +34,11 @@ public final class HotRepoClientAgentExecutorProducer {
     }
 
     /**
-     * Agent executor implementation for ping service.
+     * Agent executor implementation for hot-repo client agent service.
      */
-    private static class ClientAgentExecutor extends BDIAgentExecutor {
+    private class ClientAgentExecutor extends BDIAgentExecutor {
 
-        static final String myUrl = "http://127.0.0.1:9980"; // see also application.properties:quarkus.http.port
+        final String myUrl = "http://127.0.0.1:" + httpPort;
         static final String hotRepoUrl = "http://127.0.0.1:9970";
 
         static final String skillDescr = "mandatory_skill(achieve, do_jump,0)";

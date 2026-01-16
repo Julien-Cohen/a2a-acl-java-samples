@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-/** Producer for Content Writer Agent Card. */
+/** Producer for Pinger Agent Card. */
 @ApplicationScoped
 public final class PingerAgentCardProducer {
 
@@ -21,7 +21,7 @@ public final class PingerAgentCardProducer {
   private int httpPort;
 
   /**
-   * Creates the agent card for the content writer agent.
+   * Creates the agent card for the pinger agent.
    *
    * @return the agent card
    */
